@@ -60,7 +60,7 @@ public class FileReader {
 
     private void separateRows(String tmpRow){
         Queue<Object> tmpQueue = new LinkedList<>();
-        boolean[] tmpType = new boolean[tmpRowList.getColumnNames().length];
+        boolean[] tmpType = new boolean[tmpRowList.getColumnNames().length]; //for columnType int = false, String = true
         int counter = 0;
 
         Scanner sc = new Scanner(tmpRow);
@@ -80,6 +80,6 @@ public class FileReader {
         }
         Row tmpPotion = new Row(tmpQueue.toArray());
         tmpRowList.addPotion(tmpPotion);
-        tmpRowList.setColumnType(tmpType);
+        tmpRowList.setColumnType(tmpType); //for columnType int = false, String = true
     }
 }

@@ -4,6 +4,7 @@ public class Row {
 
     private Object[] rowData;
     private static int columnSort = 0;
+    private boolean visible = true;
 //    private String name, location;
 //    private int iLvl, alchLvl;
 
@@ -22,7 +23,7 @@ public class Row {
         return rowData;
     }
 
-    private int getIntValue(int index){
+    public int getIntValue(int index){
         return (Integer) rowData[index];
     }
 
@@ -30,12 +31,14 @@ public class Row {
         return rowData[index].toString();
     }
 
-
-
-    @Override
-    public String toString(){
-        return rowData.toString() + "\n";
+    public boolean isVisible(){
+        return visible;
     }
+
+    public void setVisible(boolean visible){
+        this.visible = visible;
+    }
+
 
     private static class byAscending implements Comparator<Row>{
         public int compare(Row p1, Row p2){
@@ -57,6 +60,11 @@ public class Row {
     public static Comparator<Row> getComparatorByAlphabetical(int column){
         columnSort = column;
         return new byAlphabetical();
+    }
+
+    @Override
+    public String toString(){
+        return rowData.toString() + "\n";
     }
 
 }

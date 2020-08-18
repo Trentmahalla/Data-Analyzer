@@ -5,10 +5,17 @@ public class RowList implements Iterable<Row> {
     private ArrayList<Row> rowList;
     private Object[] columnNames;
     private FileReader fileReader;
-    private boolean[] columnType;
+    private boolean[] columnType; //for columnType int = false, String = true
 
     public RowList(){
          rowList = new ArrayList<Row>();
+    }
+
+    public RowList(RowList rowListObj){
+        this.rowList = rowListObj.rowList;
+        this.columnNames = rowListObj.columnNames;
+        this.fileReader = rowListObj.fileReader;
+        this. columnType = rowListObj.columnType;
     }
 
     public void addPotion(Row p){
@@ -30,7 +37,18 @@ public class RowList implements Iterable<Row> {
         else{
             return false;
         }
+    }
 
+    public void reReadFile(){
+        if(fileReader.hasFile()) {
+            rowList.clear();
+            RowList rl = fileReader.readAll();
+            columnNames = rl.getColumnNames().clone();
+            columnType = rl.getColumnType().clone();
+
+            Iterator<Row> iterator = rl.iterator();
+            iterator.forEachRemaining(rowList::add);
+        }
     }
 
     public void setColumnNames(Object[] colName){
@@ -45,7 +63,7 @@ public class RowList implements Iterable<Row> {
         return columnNames;
     }
 
-    private boolean[] getColumnType(){
+    public boolean[] getColumnType(){
         return columnType;
     }
 
@@ -62,12 +80,27 @@ public class RowList implements Iterable<Row> {
                 }
                 break;
             case 1: //alphabetical
-                if(columnType[columnChoice]) {
+                if(columnType[columnChoice]) { //for columnType int = false, String = true
                     Collections.sort(rowList, Row.getComparatorByAlphabetical(columnChoice));
                 }
                 break;
+            case 2: //range sort with dialog box
+                //The list must be sorted first to check a range
+                if(!columnType[columnChoice]) { //for columnType int = false, String = true
+                    Collections.sort(rowList, Row.getComparatorColumnNumSortAsc(columnChoice));
+                }
+                RangeSortDialog rsD = new RangeSortDialog(rowList, columnChoice, columnType);
+                rsD.setLocationRelativeTo(null);
+                rsD.setVisible(true);
+                break;
         }
 
+    }
+
+    public void resetVisible(){
+        for(Row r: rowList){
+            r.setVisible(true);
+        }
     }
 
     public Iterator<Row> getRows(){
